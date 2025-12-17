@@ -1,0 +1,16 @@
+/*
+!.vscode/
+!.gitignore
+!LICENSE
+!README.md
+!.github/
+!build_hook.py
+!windows_font_manager/
+!windows-font-manager-webui/
+!pyproject.toml
+!tests.py
+!ruff.toml
+
+__pycache__
+
+windows_font_manager/static

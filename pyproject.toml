@@ -1,0 +1,49 @@
+[build-system]
+requires = [
+    "setuptools>=80",
+    #
+]
+
+[project]
+name = "windows_font_manager"
+dynamic = ["version"]
+readme = "README.md"
+license = "AGPL-3.0-or-later"
+classifiers = [
+    "Development Status :: 3 - Alpha",
+    "Programming Language :: Python :: 3.12",
+    "Programming Language :: Python :: 3.13",
+    "Programming Language :: Python :: 3.14",
+    "Operating System :: Microsoft :: Windows :: Windows 10",
+    "Operating System :: Microsoft :: Windows :: Windows 11",
+    "Intended Audience :: Developers",
+    "Intended Audience :: End Users/Desktop",
+    "Typing :: Typed",
+]
+requires-python = ">=3.12"
+dependencies = [
+    "fastapi>=0.124.0",
+    "uvicorn>=0.38.0",
+    "easyrip>=4.7.0",
+    #
+]
+authors = [{ name = "op200" }]
+
+[project.urls]
+Homepage = "https://github.com/op200/windows_font_manager"
+Source = "https://github.com/op200/windows_font_manager"
+
+[project.scripts]
+windows_font_manager = "windows_font_manager.__main__:run"
+
+[tool.setuptools.dynamic]
+version = { attr = "windows_font_manager.__version__" }
+
+[tool.setuptools.package-dir]
+windows_font_manager = "windows_font_manager"
+
+[tool.setuptools.package-data]
+windows_font_manager = ["static/**/*"]
+
+[tool.setuptools.cmdclass]
+build = "build_hook.Build"
