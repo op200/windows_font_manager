@@ -25,6 +25,7 @@ dependencies = [
     "fastapi>=0.124.0",
     "uvicorn>=0.38.0",
     "easyrip>=4.7.0",
+    "watchdog>=6.0.0",
     #
 ]
 authors = [{ name = "op200" }]
@@ -46,4 +47,4 @@ windows_font_manager = "windows_font_manager"
 windows_font_manager = ["static/**/*"]
 
 [tool.setuptools.cmdclass]
-build = "build_hook.Build"
+build = ".build_hook.Build"

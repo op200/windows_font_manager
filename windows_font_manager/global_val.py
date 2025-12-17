@@ -1,6 +1,6 @@
 import os
 
-VERSION = "0.1.0"
+VERSION = "0.1.1"
 
 WIN_FONT_PATHS: tuple[str, ...] = (
     os.path.join(os.environ["SYSTEMROOT"], "Fonts"),
