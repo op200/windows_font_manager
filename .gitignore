@@ -4,11 +4,12 @@
 !LICENSE
 !README.md
 !.github/
-!build_hook.py
 !windows_font_manager/
 !windows-font-manager-webui/
 !pyproject.toml
-!tests.py
+!build_hook.py
+!run_build.py
+!MANIFEST.in
 !ruff.toml
 
 __pycache__

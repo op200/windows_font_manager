@@ -1,5 +1,4 @@
 import asyncio
-import sys
 
 from easyrip import log
 
@@ -19,11 +18,7 @@ async def main():
 
 
 def run():
-    try:
-        asyncio.run(main())
-    except KeyboardInterrupt:
-        log.debug("Manually force exit")
-        sys.exit(0)
+    asyncio.run(main())
 
 
 if __name__ == "__main__":
