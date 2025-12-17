@@ -26,6 +26,7 @@ jobs:
         with:
           node-version: "latest"
           cache: "pnpm"
+          cache-dependency-path: "./windows-font-manager-webui/pnpm-lock.yaml"
 
       - name: Set up Python
         uses: actions/setup-python@v6
