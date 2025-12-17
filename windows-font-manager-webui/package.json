@@ -13,6 +13,7 @@
     "build-only": "vite build",
     "type-check": "vue-tsc --build"
   },
+  "packageManager": "pnpm@10.26.0",
   "dependencies": {
     "crypto-js": "^4.2.0",
     "jssha": "^3.3.1",
