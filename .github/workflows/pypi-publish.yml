@@ -12,7 +12,6 @@ jobs:
     permissions:
       id-token: write # IMPORTANT: this permission is mandatory for trusted publishing
     steps:
-      # retrieve your distributions here
       - uses: actions/checkout@v6
 
       - name: Install pnpm

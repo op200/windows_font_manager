@@ -47,4 +47,4 @@ windows_font_manager = "windows_font_manager"
 windows_font_manager = ["static/**/*"]
 
 [tool.setuptools.cmdclass]
-build = ".build_hook.Build"
+build = "build_hook.Build"
