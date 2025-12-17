@@ -14,6 +14,7 @@ export interface FontData {
 }
 
 export const useMainStore = defineStore('main', () => {
+  const back_info = ref<Record<string, any>>({})
   const is_connect = ref(true)
 
   const ws = ref(new WebSocket(ws_url))
@@ -45,6 +46,8 @@ export const useMainStore = defineStore('main', () => {
       log.debug("@ws:msg", event, data_json, data.length)
       if ('fonts' in data_json && data_json.fonts !== null)
         font_dict.value = data_json.fonts
+      if ('info' in data_json)
+        back_info.value = data_json.info
     }
   }
   reconnect_ws(true)
@@ -60,5 +63,5 @@ export const useMainStore = defineStore('main', () => {
 
   const show_text = ref('中文。0.123abDE,ff')
 
-  return { ws, is_connect, font_dict, font_dict_selected, show_text }
+  return { ws, is_connect, back_info, font_dict, font_dict_selected, show_text }
 })

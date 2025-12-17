@@ -23,7 +23,7 @@ classifiers = [
 requires-python = ">=3.12"
 dependencies = [
     "fastapi>=0.124.0",
-    "uvicorn>=0.38.0",
+    "uvicorn[standard]>=0.38.0",
     "easyrip>=4.7.0",
     "watchdog>=6.0.0",
     #

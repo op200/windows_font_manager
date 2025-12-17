@@ -1,1 +1,3 @@
-__version__ = "0.1.3"
+from .global_val import VERSION
+
+__version__ = VERSION

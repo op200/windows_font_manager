@@ -18,7 +18,7 @@ async def main():
     log.init()
 
     font_data.add_font_data_dir(*WIN_FONT_PATHS)
-
+    # TODO 动态添加的path也要监听
     await asyncio.gather(server.run(), start_file_watch(*WIN_FONT_PATHS))
 
 

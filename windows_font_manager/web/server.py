@@ -1,3 +1,4 @@
+import importlib.resources as pkg_resources
 import socket
 
 import uvicorn
@@ -26,7 +27,11 @@ async def websocket_endpoint(websocket: WebSocket):
 
 
 app.mount(
-    "/", StaticFiles(directory="windows_font_manager/static", html=True), name="root"
+    "/",
+    StaticFiles(
+        directory=str(pkg_resources.files("windows_font_manager") / "static"), html=True
+    ),
+    name="root",
 )
 
 

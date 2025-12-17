@@ -9,6 +9,7 @@ from easyrip.utils import type_match
 from fastapi import WebSocket
 
 from ..font import font_data
+from ..global_val import VERSION
 
 push_msg_ws_set: Final[weakref.WeakSet[WebSocket]] = weakref.WeakSet()
 """需要主动推送的 ws"""
@@ -35,6 +36,7 @@ class Response_font_info_dict(Response_font_dict):
 class Response_dict(TypedDict):
     """None 表示不返回而不是返回为空"""
 
+    info: dict
     execute: list[str]
     fonts: dict[str, list[Response_font_dict]] | None
     fonts_info: Response_font_info_dict | None
@@ -51,6 +53,7 @@ class Webui_msg_dict(TypedDict):
 async def process_msg(msg: str) -> str:
     """接收前端消息，返回后端消息"""
     res: Response_dict = {
+        "info": {"version": VERSION},
         "execute": [],
         "fonts": None,
         "fonts_info": None,
