@@ -122,8 +122,8 @@ watch(font_dict, () => {
                                 </n-icon>
                             </template>
                         </n-button>
-                        <n-input v-model:value="search_text" type="text" placeholder="Search" />
-                        <n-input v-model:value="show_text" type="text" placeholder="Show" />
+                        <n-input clearable v-model:value="search_text" type="text" placeholder="Search" />
+                        <n-input clearable v-model:value="show_text" type="text" placeholder="Show" />
                     </n-space>
                 </n-flex>
                 <n-data-table :columns="[
@@ -138,6 +138,7 @@ watch(font_dict, () => {
                     {
                         title: 'Path',
                         key: 'path',
+                        width: `min(40em, calc(${Math.max(...(filted_value || val).map(font_data => font_data.filename.length))} * var(--n-font-size)))`,
                         resizable: true,
                         sorter: (row1: FontData, row2: FontData) =>
                             row1.pathname.localeCompare(row2.pathname, 'zh-CN', {

@@ -4,7 +4,10 @@ import { ref, watch } from 'vue'
 
 const ws_url = '/ws'
 
-
+export interface BackInfo {
+  version: string
+  latest_release_ver: string
+}
 export interface FontData {
   pathname: string
   filename: string
@@ -14,7 +17,6 @@ export interface FontData {
 }
 
 export const useMainStore = defineStore('main', () => {
-  const back_info = ref<Record<string, any>>({})
   const is_connect = ref(true)
 
   const ws = ref(new WebSocket(ws_url))
@@ -45,13 +47,14 @@ export const useMainStore = defineStore('main', () => {
       const data_json = JSON.parse(data)
       log.debug("@ws:msg", event, data_json, data.length)
       if ('fonts' in data_json && data_json.fonts !== null)
-        font_dict.value = data_json.fonts
+        font_dict.value = data_json.fonts || {}
       if ('info' in data_json)
         back_info.value = data_json.info
     }
   }
   reconnect_ws(true)
 
+  const back_info = ref<BackInfo>()
   const font_dict = ref<Record<string, FontData[]>>({})
 
   const font_dict_selected = ref<string | undefined>()

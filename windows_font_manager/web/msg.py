@@ -1,10 +1,12 @@
 import itertools
 import json
 import weakref
+from functools import cache
 from pathlib import Path
 from typing import Any, Final, TypedDict
 
 from easyrip import log
+from easyrip.easyrip_web.third_party_api import github
 from easyrip.utils import type_match
 from fastapi import WebSocket
 
@@ -33,10 +35,15 @@ class Response_font_info_dict(Response_font_dict):
     pass
 
 
+class Response_info(TypedDict):
+    version: str
+    latest_release_ver: str | None
+
+
 class Response_dict(TypedDict):
     """None 表示不返回而不是返回为空"""
 
-    info: dict
+    info: Response_info
     execute: list[str]
     fonts: dict[str, list[Response_font_dict]] | None
     fonts_info: Response_font_info_dict | None
@@ -50,10 +57,24 @@ class Webui_msg_dict(TypedDict):
     get_font_info: Any  # TODO
 
 
+@cache
+def _get_github_latest_release_ver(release_api_url: str) -> str | None:
+    return github.get_latest_release_ver(release_api_url)
+
+
+async def get_github_latest_release_ver(release_api_url: str) -> str | None:
+    return _get_github_latest_release_ver(release_api_url)
+
+
 async def process_msg(msg: str) -> str:
     """接收前端消息，返回后端消息"""
     res: Response_dict = {
-        "info": {"version": VERSION},
+        "info": {
+            "version": VERSION,
+            "latest_release_ver": await get_github_latest_release_ver(
+                "https://api.github.com/repos/op200/windows_font_manager/releases/latest"
+            ),
+        },
         "execute": [],
         "fonts": None,
         "fonts_info": None,
@@ -107,7 +128,7 @@ async def process_msg(msg: str) -> str:
 
             case "add_dirs":
                 assert type_match(val, list[str])
-                font_data.add_font_data_dir(*val)
+                await font_data.add_font_data_dir(*val)
                 write_fonts()
 
             case "pop_dirs":

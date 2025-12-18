@@ -11,9 +11,13 @@ class font_data:
         cls.font_data_dict = {d: load_fonts(d) for d in cls.font_data_dict}
 
     @classmethod
-    def add_font_data_dir(cls, *dirs: str):
+    async def add_font_data_dir(cls, *dirs: str):
+        from .file_watch import file_watch
+
         for d in dirs:
             cls.font_data_dict[d] = load_fonts(d)
+
+        await file_watch.new_file_watch(*dirs)
 
     @classmethod
     def pop_font_data_dir(cls, *dirs: str):

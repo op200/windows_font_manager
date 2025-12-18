@@ -1,8 +1,10 @@
 import { LogType, useLogStore } from '@/stores/logStore'
-
+import { useSettingStore } from '@/stores/settingStore'
 
 export namespace log {
     export function debug(...data: any[]): void {
+        if (!useSettingStore().is_debug)
+            return
         console.debug(...data)
         useLogStore().log_list.push({ type: LogType.debug, data: data, time: new Date() })
     }

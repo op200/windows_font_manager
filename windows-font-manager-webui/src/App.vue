@@ -7,10 +7,11 @@ import { storeToRefs } from 'pinia';
 import { h, onBeforeMount, ref, watch } from 'vue';
 import { RouterLink, RouterView, useRoute } from 'vue-router';
 import { log } from './utils/log';
+import { compare_version, open_page } from './utils/utils';
 
 const route = useRoute()
 
-const { ws, is_connect } = storeToRefs(useMainStore())
+const { ws, is_connect, back_info } = storeToRefs(useMainStore())
 
 const currentTheme = ref()
 const css_data_theme = ref<string>()
@@ -104,6 +105,11 @@ const collapseMenu = ref(true);
             <!-- 顶部按钮栏 -->
             <n-flex id="topButtonBarFlex" justify="end">
 
+                <n-button dashed type="primary"
+                    @click="open_page('https://github.com/op200/windows_font_manager/releases')"
+                    v-if="back_info && compare_version(back_info.latest_release_ver, back_info.version) > 0">
+                    New version v{{ back_info.latest_release_ver }}
+                </n-button>
 
                 <n-button strong tertiary circle tag="div" :type="is_connect ? 'default' : 'warning'"
                     style="cursor: inherit;background-color: transparent;">
