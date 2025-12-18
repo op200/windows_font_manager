@@ -123,7 +123,7 @@ async def process_msg(msg: str) -> str:
                     except PermissionError as e:
                         log.error("Delete faild: {}", e)
                 # 刷新
-                font_data.refresh_font_data_dict()
+                await font_data.refresh_font_data_dict()
                 write_fonts()
 
             case "add_dirs":

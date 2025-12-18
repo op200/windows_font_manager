@@ -1,3 +1,5 @@
+import asyncio
+
 from easyrip import log
 from easyrip.ripper.sub_and_font.font import Font, load_fonts
 
@@ -7,8 +9,11 @@ class font_data:
     """实时变化的监听目录及其结果"""
 
     @classmethod
-    def refresh_font_data_dict(cls):
-        cls.font_data_dict = {d: load_fonts(d) for d in cls.font_data_dict}
+    async def refresh_font_data_dict(cls):
+        log.info(cls.refresh_font_data_dict.__name__)
+        cls.font_data_dict = {
+            d: await asyncio.to_thread(load_fonts, d) for d in cls.font_data_dict
+        }
 
     @classmethod
     async def add_font_data_dir(cls, *dirs: str):

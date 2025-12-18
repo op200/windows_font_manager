@@ -14,12 +14,10 @@ const home_url = "https://github.com/op200/windows_font_manager"
 
         <n-card title="Windows Font Manager">
             <template #header-extra>
-                <a :href=home_url>
-                    {{ home_url }}
-                </a>
+                <a :href=home_url>{{ home_url }}</a>
             </template>
             <div>
-                <span>v{{ back_info.version }}</span>
+                <span v-if="back_info">v{{ back_info.version }}</span>
             </div>
         </n-card>
 
