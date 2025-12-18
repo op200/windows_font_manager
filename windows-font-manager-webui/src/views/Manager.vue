@@ -138,7 +138,7 @@ watch(font_dict, () => {
                     {
                         title: 'Path',
                         key: 'path',
-                        width: `min(40em, calc(${Math.max(...(filted_value || val).map(font_data => font_data.filename.length))} * var(--n-font-size)))`,
+                        width: `max(10em, min(40em, calc(${Math.max(...(filted_value || val).map(font_data => font_data.filename.length))} * var(--n-font-size))))`,
                         resizable: true,
                         sorter: (row1: FontData, row2: FontData) =>
                             row1.pathname.localeCompare(row2.pathname, 'zh-CN', {
