@@ -4,9 +4,35 @@ import { log } from '@/utils/log'
 import { Delete24Regular } from '@vicons/fluent'
 import { NButton, NDataTable, NFlex, NIcon, NInput, NList, NListItem, NModal, NSpace, NTabPane, NTabs, NTag, NTooltip } from 'naive-ui'
 import { storeToRefs } from 'pinia'
-import { h, ref, watch } from 'vue'
+import { computed, h, ref, watch } from 'vue'
 
 const { ws, font_dict, font_dict_selected, show_text } = storeToRefs(useMainStore())
+
+const duplicate_family_same_path = computed<Set<string>>(() => {
+    if (font_dict_selected.value === undefined || !(font_dict_selected.value in font_dict.value))
+        return new Set()
+
+    const all_family = font_dict.value[font_dict_selected.value]
+        ?.map(data =>
+            data.familys.map(fam =>
+                `${fam}/${data.font_type}`))
+        .flat()
+
+    if (all_family === undefined)
+        return new Set()
+
+    return new Set(all_family.filter((x, i) => all_family.indexOf(x) !== i))
+})
+const duplicate_family = computed<Set<string>>(() => {
+    const all_family = Object.values(font_dict.value)
+        .flat()
+        .map(data =>
+            data.familys.map(fam =>
+                `${fam}/${data.font_type}`))
+        .flat()
+
+    return new Set(all_family.filter((x, i) => all_family.indexOf(x) !== i))
+})
 
 const nvg = navigator
 
@@ -204,6 +230,14 @@ watch(font_dict, () => {
                                         return h(
                                             NButton,
                                             {
+                                                ghost: true,
+                                                type: (
+                                                    duplicate_family_same_path.has(`${tagKey}/${rowData.font_type}`)
+                                                        ? 'error'
+                                                        : duplicate_family.has(`${tagKey}/${rowData.font_type}`)
+                                                            ? 'warning'
+                                                            : 'default'
+                                                ),
                                                 size: 'tiny',
                                                 style: { 'white-space': 'normal' },
                                                 onClick: () => {

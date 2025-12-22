@@ -126,7 +126,7 @@ async def process_msg(msg: str) -> str:
                         if not remove_res[0]:
                             raise Exception(remove_res[1])
                     except Exception as e:
-                        log.error("Delete faild: {}", e)
+                        log.error("Delete font faild: {}", e)
                     else:
                         log.info("Delete font success: {}", remove_res[1])
                 # 刷新
