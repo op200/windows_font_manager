@@ -77,14 +77,27 @@ class file_watch:
     file_watch_event_handler = File_watch_event_handler()
 
     @classmethod
-    async def new_file_watch(cls, *paths: str) -> None:
+    def stop(cls):
         if cls.observer is not None:
             cls.observer.stop()
+
+    @classmethod
+    def start(cls):
+        if cls.observer is not None:
+            try:
+                cls.observer.start()
+            except RuntimeError:
+                pass
+
+    @classmethod
+    async def new_file_watch(cls, *paths: str) -> None:
+        cls.stop()
 
         cls.observer = Observer()
         for path in paths:
             cls.observer.schedule(cls.file_watch_event_handler, path, recursive=True)
-        cls.observer.start()
+
+        cls.start()
 
         # 设置当前事件循环
         cls.set_event_loop(asyncio.get_running_loop())

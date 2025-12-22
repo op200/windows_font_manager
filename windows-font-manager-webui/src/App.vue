@@ -107,7 +107,7 @@ const collapseMenu = ref(true);
 
                 <n-button dashed type="primary"
                     @click="open_page('https://github.com/op200/windows_font_manager/releases')"
-                    v-if="back_info && compare_version(back_info.latest_release_ver, back_info.version) > 0">
+                    v-if="back_info?.latest_release_ver && compare_version(back_info.latest_release_ver, back_info.version) > 0">
                     New version v{{ back_info.latest_release_ver }}
                 </n-button>
 

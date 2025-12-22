@@ -11,6 +11,7 @@
 !run_build.py
 !MANIFEST.in
 !ruff.toml
+!BackFont.fcp
 
 __pycache__
 

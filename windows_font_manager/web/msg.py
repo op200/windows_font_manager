@@ -10,7 +10,8 @@ from easyrip.easyrip_web.third_party_api import github
 from easyrip.utils import type_match
 from fastapi import WebSocket
 
-from ..font import font_data
+from ..file_watch import file_watch
+from ..font import font_data, remove_font
 from ..global_val import VERSION
 
 push_msg_ws_set: Final[weakref.WeakSet[WebSocket]] = weakref.WeakSet()
@@ -113,17 +114,24 @@ async def process_msg(msg: str) -> str:
                     font_data.font_data_dict.values()
                 ):
                     if any(Path(del_font).samefile(font.pathname) for del_font in val):
+                        # if any(map(Path(font.pathname).samefile, val)):
                         font.font.close()
                         continue
+                file_watch.stop()
                 # 删除文件
                 for pathname in val:
                     log.info("Delete font: {}", pathname)
                     try:
-                        Path(pathname).unlink(True)
-                    except PermissionError as e:
+                        remove_res = remove_font(pathname)
+                        if not remove_res[0]:
+                            raise Exception(remove_res[1])
+                    except Exception as e:
                         log.error("Delete faild: {}", e)
+                    else:
+                        log.info("Delete font success: {}", remove_res[1])
                 # 刷新
                 await font_data.refresh_font_data_dict()
+                file_watch.start()
                 write_fonts()
 
             case "add_dirs":

@@ -6,7 +6,7 @@ const ws_url = '/ws'
 
 export interface BackInfo {
   version: string
-  latest_release_ver: string
+  latest_release_ver: string | null
 }
 export interface FontData {
   pathname: string
@@ -46,8 +46,10 @@ export const useMainStore = defineStore('main', () => {
       const data = event.data as string
       const data_json = JSON.parse(data)
       log.debug("@ws:msg", event, data_json, data.length)
-      if ('fonts' in data_json && data_json.fonts !== null)
+
+      if ('fonts' in data_json)
         font_dict.value = data_json.fonts || {}
+
       if ('info' in data_json)
         back_info.value = data_json.info
     }

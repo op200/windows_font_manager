@@ -240,7 +240,7 @@ watch(font_dict, () => {
                                 {
                                     style: {
                                         'font-size': '1.4rem',
-                                        'font-family': rowData.familys,
+                                        'font-family': [...rowData.familys, 'BackFont'].reduce((pre, cur) => `${pre}, '${cur}'`),
                                         'font-weight': rowData.font_type_val[0] ? 'bold' : 'normal',
                                         'font-style': rowData.font_type_val[1] ? 'italic' : 'normal',
                                     }

@@ -1,18 +1,13 @@
 import asyncio
-import os
 
 from easyrip import log
 
 from .font import font_data
+from .global_val import WIN_FONT_PATHS
 from .web import server
 
 
 async def main():
-    WIN_FONT_PATHS: tuple[str, ...] = (
-        os.path.join(os.environ["SYSTEMROOT"], "Fonts"),
-        os.path.join(os.environ["LOCALAPPDATA"], "Microsoft/Windows/Fonts"),
-    )
-
     log.write_level = log.LogLevel.none
     log.init()
 
