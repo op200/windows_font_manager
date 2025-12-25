@@ -47,6 +47,9 @@ const handleKeyUp = (e: KeyboardEvent) => {
 }
 window.addEventListener('keydown', handleKeyDown)
 window.addEventListener('keyup', handleKeyUp)
+window.addEventListener('focus', () => {
+    global_ctrl_state.value = false
+})
 
 const TAB_HEIGHT = "calc(100vh - 4rem - 3px - 168px)"
 
@@ -57,7 +60,7 @@ const show_tab_add_modal = ref(false)
 const tab_add_modal_input = ref<string>()
 
 const show_del_fonts_modal = ref(false)
-const is_close_window_before_del_fonts = ref(false)
+const is_close_tab_before_del_fonts = ref(false)
 const will_del_fonts = ref<string[]>([])
 
 const search_text = ref<string>("")
@@ -109,13 +112,14 @@ watch(font_dict, () => {
         <!-- del fonts -->
         <n-modal v-model:show="show_del_fonts_modal" :mask-closable="false" preset="dialog" negative-text="Cancel"
             positive-text="OK" :show-icon="false"
-            :title="`Delete ${will_del_fonts.length} font${will_del_fonts.length ? 's' : ''}`" @positive-click="() => {
+            :title="`Delete ${will_del_fonts.length} font${will_del_fonts.length ? 's' : ''}${is_close_tab_before_del_fonts ? ' after closing tab' : ''}`"
+            @positive-click="() => {
                 font_dict = {}
                 ws.send(JSON.stringify({ wait_ms: 1000, del_fonts: will_del_fonts }))
-                if (is_close_window_before_del_fonts)
+                if (is_close_tab_before_del_fonts)
                     wd.close()
-                is_close_window_before_del_fonts = false
-            }">
+                is_close_tab_before_del_fonts = false
+            }" :on-after-leave="() => global_ctrl_state = false" style="width: 40vw;">
             <n-list bordered style="height: 24em;overflow-y: auto;">
                 <n-list-item v-for="(v, i) in will_del_fonts">
                     <n-flex style="align-items: center;">
@@ -158,7 +162,8 @@ watch(font_dict, () => {
                             @click="() => {
                                 will_del_fonts = checked_row_data_dict[key]?.map(v => v.pathname) || []
                                 show_del_fonts_modal = true
-                            }" @click.ctrl.exact="is_close_window_before_del_fonts = true">
+                                is_close_tab_before_del_fonts = false
+                            }" @click.ctrl.exact="is_close_tab_before_del_fonts = true">
                             <template #icon>
                                 <n-icon>
                                     <Delete24Regular />
