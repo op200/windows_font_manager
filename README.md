@@ -1,3 +1,5 @@
+![rendering](./doc/rendering.webp)
+
 ### Start
 
 1. Install and upgrade  
