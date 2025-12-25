@@ -1,7 +1,7 @@
 import os
 from pathlib import Path
 
-VERSION = "0.3.1"
+VERSION = "0.3.2"
 
 WIN_FONT_PATHS: tuple[str, ...] = tuple(
     path if Path(path).is_dir() else ""

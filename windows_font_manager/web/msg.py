@@ -1,3 +1,4 @@
+import asyncio
 import itertools
 import json
 import weakref
@@ -51,6 +52,7 @@ class Response_dict(TypedDict):
 
 
 class Webui_msg_dict(TypedDict):
+    wait_ms: int
     get_fonts: str
     del_fonts: list[str]
     add_dirs: list[str]
@@ -104,6 +106,15 @@ async def process_msg(msg: str) -> str:
             continue
         res["execute"].append(key)
         match key:
+            case "wait_ms":
+                assert isinstance(val, int)
+
+                if val >= 0:
+                    log.info("Wait {}ms", val)
+                    await asyncio.sleep(val / 1000)
+                else:
+                    log.warning("The '{}: {}' is illegal", key, val)
+
             case "get_fonts":
                 write_fonts()
 
