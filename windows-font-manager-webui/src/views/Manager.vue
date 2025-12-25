@@ -8,6 +8,8 @@ import { computed, h, ref, watch } from 'vue'
 
 const { ws, font_dict, font_dict_selected, show_text } = storeToRefs(useMainStore())
 
+const show_text_replaced = computed(() => show_text.value.replace(/(?<!\\)\\n/g, '\n'))
+
 const duplicate_family_same_path = computed<Set<string>>(() => {
     if (font_dict_selected.value === undefined || !(font_dict_selected.value in font_dict.value))
         return new Set()
@@ -163,8 +165,10 @@ watch(font_dict, () => {
                                 </n-icon>
                             </template>
                         </n-button>
-                        <n-input clearable v-model:value="search_text" type="text" placeholder="Search" />
-                        <n-input clearable v-model:value="show_text" type="text" placeholder="Show" />
+                        <n-input clearable v-model:value="search_text" type="text" placeholder="Search"
+                            style="font-family: serif;min-width: 25em;" />
+                        <n-input clearable v-model:value="show_text" type="text" placeholder="Show"
+                            style="font-family: serif;min-width: 25em;" />
                     </n-space>
                 </n-flex>
                 <n-data-table :columns="[
@@ -292,9 +296,10 @@ watch(font_dict, () => {
                                         'font-family': [...rowData.familys, 'BackFont'].reduce((pre, cur) => `${pre}, '${cur}'`),
                                         'font-weight': rowData.font_type_val[0] ? 'bold' : 'normal',
                                         'font-style': rowData.font_type_val[1] ? 'italic' : 'normal',
+                                        'white-space': 'break-spaces',
                                     }
                                 },
-                                show_text,
+                                show_text_replaced,
                             )
                         }
                     },

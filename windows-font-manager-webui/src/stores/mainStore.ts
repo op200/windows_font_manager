@@ -66,7 +66,7 @@ export const useMainStore = defineStore('main', () => {
     }
   })
 
-  const show_text = ref('中文。0.123abDE,ff')
+  const show_text = ref('中文。0.123abDE,ffjglIi')
 
   return { ws, is_connect, back_info, font_dict, font_dict_selected, show_text }
 })
