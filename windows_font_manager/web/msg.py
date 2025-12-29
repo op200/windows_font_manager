@@ -142,7 +142,7 @@ async def process_msg(msg: str) -> str:
                         log.info("Delete font success: {}", remove_res[1])
                 # 刷新
                 await font_data.refresh_font_data_dict()
-                file_watch.start()
+                await file_watch.new_file_watch(*font_data.font_data_dict.keys())
                 write_fonts()
 
             case "add_dirs":

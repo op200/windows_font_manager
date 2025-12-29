@@ -1,7 +1,7 @@
 <script setup lang="ts">
-import { useLogStore, type LogRecord, LogType } from '@/stores/logStore'
+import { LogType, useLogStore } from '@/stores/logStore'
+import { NAvatar, NList, NListItem, NTag } from 'naive-ui'
 import { storeToRefs } from 'pinia'
-import { NList, NListItem, NTag, NButton, NAvatar } from 'naive-ui'
 
 const { log_list } = storeToRefs(useLogStore())
 
@@ -38,6 +38,7 @@ const log_type_str_set = new Set(['string', 'number'] as const)
 <style scoped>
 .log-list-item {
     display: flex;
+    align-items: center;
     gap: 1rem;
     padding: 0 1rem;
 }
