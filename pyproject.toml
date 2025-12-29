@@ -10,7 +10,7 @@ dynamic = ["version"]
 readme = "README.md"
 license = "AGPL-3.0-or-later"
 classifiers = [
-    "Development Status :: 3 - Alpha",
+    "Development Status :: 4 - Beta",
     "Programming Language :: Python :: 3.12",
     "Programming Language :: Python :: 3.13",
     "Programming Language :: Python :: 3.14",
@@ -22,9 +22,9 @@ classifiers = [
 ]
 requires-python = ">=3.12"
 dependencies = [
-    "fastapi>=0.124.0",
-    "uvicorn[standard]>=0.38.0",
-    "easyrip>=4.7.0",
+    "fastapi>=0.128.0",
+    "uvicorn[standard]>=0.40.0",
+    "easyrip>=4.11.0",
     "watchdog>=6.0.0",
     #
 ]
