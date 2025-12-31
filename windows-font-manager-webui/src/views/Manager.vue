@@ -4,9 +4,9 @@ import { log } from '@/utils/log'
 import { Delete24Regular } from '@vicons/fluent'
 import { NButton, NDataTable, NFlex, NIcon, NInput, NList, NListItem, NModal, NSpace, NTabPane, NTabs, NTag, NTooltip } from 'naive-ui'
 import { storeToRefs } from 'pinia'
-import { computed, h, ref, watch } from 'vue'
+import { computed, h, onMounted, ref, watch } from 'vue'
 
-const { ws, font_dict, font_dict_selected, show_text } = storeToRefs(useMainStore())
+const { ws, font_dict, font_dict_selected, search_text, show_text } = storeToRefs(useMainStore())
 
 const show_text_replaced = computed(() => show_text.value.replace(/(?<!\\)\\n/g, '\n'))
 
@@ -63,7 +63,6 @@ const show_del_fonts_modal = ref(false)
 const is_close_tab_before_del_fonts = ref(false)
 const will_del_fonts = ref<string[]>([])
 
-const search_text = ref<string>("")
 const filted_value = ref<FontData[] | undefined>(undefined)
 async function refresh_search_text() {
     if (!(search_text && font_dict_selected.value)) {
@@ -87,6 +86,7 @@ watch(font_dict, () => {
     checked_row_keys_dict.value = {}
     checked_row_data_dict.value = {}
 }, { deep: false })
+onMounted(refresh_search_text)
 
 </script>
 
@@ -115,22 +115,32 @@ watch(font_dict, () => {
             :title="`Delete ${will_del_fonts.length} font${will_del_fonts.length ? 's' : ''}${is_close_tab_before_del_fonts ? ' after closing tab' : ''}`"
             @positive-click="() => {
                 font_dict = {}
-                ws.send(JSON.stringify({ wait_ms: 1000, del_fonts: will_del_fonts }))
+                ws.send(JSON.stringify({ wait_ms: is_close_tab_before_del_fonts ? 5000 : 1000, del_fonts: will_del_fonts }))
                 if (is_close_tab_before_del_fonts)
                     wd.close()
                 is_close_tab_before_del_fonts = false
             }" :on-after-leave="() => global_ctrl_state = false" style="width: 40vw;">
-            <n-list bordered style="height: 24em;overflow-y: auto;">
-                <n-list-item v-for="(v, i) in will_del_fonts">
-                    <n-flex style="align-items: center;">
-                        <n-tag size="small"
-                            :style="{ width: `${will_del_fonts.length.toString().length}em`, justifyContent: 'center' }">{{
-                                i + 1
-                            }}</n-tag>
-                        <span>{{ v }}</span>
-                    </n-flex>
-                </n-list-item>
-            </n-list>
+            <n-space vertical>
+                <n-space>
+                    <n-button @click="() => {
+                        show_del_fonts_modal = false
+                        nvg.clipboard.writeText(will_del_fonts.map(v => `del \u0022${v}\u0022`).join('\n'))
+                    }">
+                        Copy delete CMD
+                    </n-button>
+                </n-space>
+                <n-list bordered style="height: 24em;overflow-y: auto;">
+                    <n-list-item v-for="(v, i) in will_del_fonts">
+                        <n-flex style="align-items: center;">
+                            <n-tag size="small"
+                                :style="{ width: `${will_del_fonts.length.toString().length}em`, justifyContent: 'center' }">{{
+                                    i + 1
+                                }}</n-tag>
+                            <span>{{ v }}</span>
+                        </n-flex>
+                    </n-list-item>
+                </n-list>
+            </n-space>
         </n-modal>
 
         <n-tabs v-model:value="font_dict_selected" type="card" tab-style="min-width: 80px;" class="one-height" closable
