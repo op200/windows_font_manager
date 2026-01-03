@@ -14,9 +14,6 @@ importers:
       jssha:
         specifier: ^3.3.1
         version: 3.3.1
-      naive-ui:
-        specifier: ^2.43.2
-        version: 2.43.2(vue@3.5.26(typescript@5.9.3))
       pinia:
         specifier: ^3.0.4
         version: 3.0.4(typescript@5.9.3)(vue@3.5.26(typescript@5.9.3))
@@ -45,6 +42,9 @@ importers:
       '@vue/tsconfig':
         specifier: ^0.8.1
         version: 0.8.1(typescript@5.9.3)(vue@3.5.26(typescript@5.9.3))
+      naive-ui:
+        specifier: ^2.43.2
+        version: 2.43.2(vue@3.5.26(typescript@5.9.3))
       npm-run-all2:
         specifier: ^8.0.4
         version: 8.0.4
@@ -659,8 +659,8 @@ packages:
     resolution: {integrity: sha512-tjwM5exMg6BGRI+kNmTntNsvdZS1X8BFYS6tnJ2hdH0kVxM6/eVZ2xy+FqStSWvYmtfFMDLIxurorHwDKfDz5Q==}
     engines: {node: '>=18'}
 
-  caniuse-lite@1.0.30001761:
-    resolution: {integrity: sha512-JF9ptu1vP2coz98+5051jZ4PwQgd2ni8A+gYSN7EA7dPKIMf0pDlSUxhdmVOaV3/fYK5uWBkgSXJaRLr4+3A6g==}
+  caniuse-lite@1.0.30001762:
+    resolution: {integrity: sha512-PxZwGNvH7Ak8WX5iXzoK1KPZttBXNPuaOvI2ZYU7NrlM+d9Ov+TUvlLOBNGzVXAntMSMMlJPd+jY6ovrVjSmUw==}
 
   convert-source-map@2.0.0:
     resolution: {integrity: sha512-Kvp459HrV2FEJ1CAsi1Ku+MY3kasH19TFykTz2xWmMeq6bk2NU3XXvfJ+Q61m0xktWwt+1HSYf3JZsTms3aRJg==}
@@ -1690,7 +1690,7 @@ snapshots:
   browserslist@4.28.1:
     dependencies:
       baseline-browser-mapping: 2.9.11
-      caniuse-lite: 1.0.30001761
+      caniuse-lite: 1.0.30001762
       electron-to-chromium: 1.5.267
       node-releases: 2.0.27
       update-browserslist-db: 1.2.3(browserslist@4.28.1)
@@ -1699,7 +1699,7 @@ snapshots:
     dependencies:
       run-applescript: 7.1.0
 
-  caniuse-lite@1.0.30001761: {}
+  caniuse-lite@1.0.30001762: {}
 
   convert-source-map@2.0.0: {}
 
