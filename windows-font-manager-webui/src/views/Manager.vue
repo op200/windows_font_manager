@@ -1,5 +1,6 @@
 <script setup lang="ts">
 import { useMainStore, type FontData } from '@/stores/mainStore'
+import { useSettingStore } from '@/stores/settingStore'
 import { log } from '@/utils/log'
 import { Delete24Regular } from '@vicons/fluent'
 import { NButton, NDataTable, NFlex, NIcon, NInput, NList, NListItem, NModal, NSpace, NTabPane, NTabs, NTag, NTooltip } from 'naive-ui'
@@ -7,6 +8,7 @@ import { storeToRefs } from 'pinia'
 import { computed, h, onMounted, ref, watch } from 'vue'
 
 const { ws, font_dict, font_dict_selected, search_text, show_text } = storeToRefs(useMainStore())
+const { show_text_size } = storeToRefs(useSettingStore())
 
 const show_text_replaced = computed(() => show_text.value.replace(/(?<!\\)\\n/g, '\n'))
 
@@ -307,7 +309,7 @@ onMounted(refresh_search_text)
                                 'span',
                                 {
                                     style: {
-                                        'font-size': '1.4rem',
+                                        'font-size': `${show_text_size}rem`,
                                         'font-family': [...rowData.familys, 'BackFont'].reduce((pre, cur) => `${pre}, '${cur}'`),
                                         'font-weight': rowData.font_type_val[0] ? 'bold' : 'normal',
                                         'font-style': rowData.font_type_val[1] ? 'italic' : 'normal',
