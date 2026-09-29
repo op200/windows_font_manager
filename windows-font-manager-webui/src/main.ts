@@ -1,5 +1,6 @@
-import { createApp } from 'vue'
 import { createPinia } from 'pinia'
+import { createApp } from 'vue'
+
 import '@/assets/fonts.css'
 
 import App from './App.vue'

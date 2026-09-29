@@ -3,19 +3,19 @@
 ### Start
 
 1. Install and upgrade  
-  `pip install -U windows_font_manager`
+   `pip install -U windows_font_manager`
 
 2. Open WebUI  
-  (Click the URL from terminal)
+   (Click the URL from terminal)
 
 ### Develop
 
-* Backend  
-  Python 3.14 (>=3.12)  
+- Backend  
+  Python 3.15 (>=3.13)  
   `debugpy` from VSCode
 
-* WebUI  
+- WebUI  
   `pnpm --dir .\windows-font-manager-webui\ dev`
 
-* Build or install  
+- Build or install  
   `py run_build.py` or `pip install .`

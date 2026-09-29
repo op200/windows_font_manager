@@ -4,9 +4,9 @@ import json
 import weakref
 from functools import cache
 from pathlib import Path
-from typing import Any, Final, TypedDict
+from typing import Final, TypedDict
 
-from easyrip import log
+from easyrip.easyrip_log import log
 from easyrip.easyrip_web.third_party_api import github
 from easyrip.utils import type_match
 from fastapi import WebSocket
@@ -57,7 +57,6 @@ class Webui_msg_dict(TypedDict):
     del_fonts: list[str]
     add_dirs: list[str]
     pop_dirs: list[str]
-    get_font_info: Any  # TODO
 
 
 @cache
@@ -154,10 +153,5 @@ async def process_msg(msg: str) -> str:
                 assert type_match(val, list[str])
                 font_data.pop_font_data_dir(*val)
                 write_fonts()
-
-            case "get_font_info":
-                pass
-                # TODO
-                # res["fonts_info"] = {}
 
     return json.dumps(res)

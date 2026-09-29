@@ -1,6 +1,6 @@
 import asyncio
 
-from easyrip import log
+from easyrip.easyrip_log import log
 
 from .font import font_data
 from .global_val import WIN_FONT_PATHS

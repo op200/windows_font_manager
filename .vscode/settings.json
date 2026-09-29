@@ -1,10 +1,10 @@
 {
-    "python-envs.defaultEnvManager": "ms-python.python:system",
-    "python-envs.pythonProjects": [],
-    "explorer.fileNesting.enabled": true,
-    "explorer.fileNesting.patterns": {
-        "tsconfig.json": "tsconfig.*.json, env.d.ts",
-        "vite.config.*": "jsconfig*, vitest.config.*, cypress.config.*, playwright.config.*",
-        "package.json": "package-lock.json, pnpm*, .yarnrc*, yarn*, .eslint*, eslint*, .oxlint*, oxlint*, .prettier*, prettier*, .editorconfig"
-    }
+  "python-envs.defaultEnvManager": "ms-python.python:venv",
+  "explorer.fileNesting.enabled": true,
+  "explorer.fileNesting.patterns": {
+    "pyproject.toml": "ruff.toml, .markdownlint.jsonc, .oxfmtrc.jsonc",
+    "tsconfig.json": "tsconfig.*.json, env.d.ts",
+    "vite.config.*": "jsconfig*, vitest.config.*, cypress.config.*, playwright.config.*",
+    "package.json": "package-lock.json, pnpm*, .yarnrc*, yarn*, .eslint*, eslint*, .oxlint*, oxlint*, .prettier*, prettier*, .editorconfig"
+  }
 }

@@ -1,29 +1,17 @@
 import asyncio
 import json
 from pathlib import Path
-from typing import TYPE_CHECKING, override
 
-from easyrip import log
+from easyrip.easyrip_log import log
 from easyrip.ripper.param import FONT_SUFFIX_SET
-from watchdog.events import FileSystemEvent, FileSystemEventHandler
-from watchdog.observers import Observer
-from watchdog.observers.api import BaseObserver
-
-if TYPE_CHECKING:
-    from concurrent.futures import Future
+from watchfiles import awatch
 
 
 class file_watch:
-    observer: BaseObserver | None = None
+    watch_task: asyncio.Task | None = None
 
-    _main_loop: asyncio.AbstractEventLoop | None = None
     is_in_push_fonts_msg: bool = False
     is_will_push_fonts_msg: bool = False
-
-    @classmethod
-    def set_event_loop(cls, loop: asyncio.AbstractEventLoop) -> None:
-        """设置主事件循环，需要在异步环境启动后调用"""
-        cls._main_loop = loop
 
     @classmethod
     async def _push_fonts_msg_core(cls) -> None:
@@ -49,55 +37,30 @@ class file_watch:
             cls.is_will_push_fonts_msg = False
             await cls.push_fonts_msg()
 
-    class File_watch_event_handler(FileSystemEventHandler):
-        @override
-        def on_any_event(self, event: FileSystemEvent) -> None:
-            src_path = Path(str(event.src_path))
+    @classmethod
+    async def _watch(cls, *paths: str) -> None:
+        async for changes in awatch(*paths, recursive=True):
+            for change, path in changes:
+                src_path = Path(path)
 
-            if src_path.suffix.lower() not in FONT_SUFFIX_SET:
-                return
+                if src_path.suffix.lower() not in FONT_SUFFIX_SET:
+                    continue
 
-            log.info(
-                f'File watch: {event.event_type}: "{event.src_path}"{f' -> "{event.dest_path}"' if event.dest_path else ""}',
-                is_format=False,
-            )
+                log.info(
+                    f'File watch: {change.name}: "{path}"',
+                    is_format=False,
+                )
 
-            # 线程安全的方式调用异步函数
-            if not (file_watch._main_loop and file_watch._main_loop.is_running()):
-                log.error(f"file_watch._main_loop = {file_watch._main_loop}")
-                return
-            future: Future = asyncio.run_coroutine_threadsafe(
-                file_watch.push_fonts_msg(), file_watch._main_loop
-            )
-            # 可选：添加完成回调处理异常
-            future.add_done_callback(
-                lambda f: f.exception() if not f.cancelled() else None
-            )
-
-    file_watch_event_handler = File_watch_event_handler()
+            if any(Path(path).suffix.lower() in FONT_SUFFIX_SET for _, path in changes):
+                await cls.push_fonts_msg()
 
     @classmethod
-    def stop(cls):
-        if cls.observer is not None:
-            cls.observer.stop()
-
-    @classmethod
-    def start(cls):
-        if cls.observer is not None:
-            try:
-                cls.observer.start()
-            except RuntimeError:
-                pass
+    def stop(cls) -> None:
+        if cls.watch_task is not None:
+            cls.watch_task.cancel()
+            cls.watch_task = None
 
     @classmethod
     async def new_file_watch(cls, *paths: str) -> None:
         cls.stop()
-
-        cls.observer = Observer()
-        for path in paths:
-            cls.observer.schedule(cls.file_watch_event_handler, path, recursive=True)
-
-        cls.start()
-
-        # 设置当前事件循环
-        cls.set_event_loop(asyncio.get_running_loop())
+        cls.watch_task = asyncio.create_task(cls._watch(*paths))

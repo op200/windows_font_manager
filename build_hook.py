@@ -1,21 +1,20 @@
-import os
+import subprocess
 from pathlib import Path
 
-from setuptools.command.build import build
+from setuptools.command.build import build  # pyright: ignore[reportMissingModuleSource]
 
 DIR = "windows-font-manager-webui"
-PNPM_HEAD = f"pnpm --dir ./{DIR}"
+PNPM_HEAD = ["pnpm", "--dir", f"./{DIR}"]
 
 
 def run_pnpm() -> None:
     for param in (
-        "i --frozen-lockfile",
-        "build",
+        ["i", "--frozen-lockfile"],
+        ["build-only"],  # TODO: vue-tsc 不支持 TS7，支持后改为 build
     ):
-        cmd = f"{PNPM_HEAD} {param}"
+        cmd: list[str] = PNPM_HEAD + param
         print(f"run: {cmd}")
-        if os.system(cmd):
-            raise RuntimeError(f"{cmd} error")
+        subprocess.run(cmd, shell=True, check=True)
 
 
 class Build(build):

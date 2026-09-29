@@ -3,36 +3,37 @@
   "version": "0.0.0",
   "private": true,
   "type": "module",
-  "engines": {
-    "node": "^20.19.0 || >=22.12.0"
-  },
   "scripts": {
     "dev": "vite",
     "build": "run-p type-check \"build-only {@}\" --",
     "preview": "vite preview",
     "build-only": "vite build",
+    "lint": "run-s lint:*",
+    "lint:oxlint": "oxlint . --fix",
     "type-check": "vue-tsc --build"
   },
-  "packageManager": "pnpm@10.26.0",
   "dependencies": {
-    "crypto-js": "^4.2.0",
-    "jssha": "^3.3.1",
-    "pinia": "^3.0.4",
-    "vue": "^3.5.26",
-    "vue-router": "^4.6.4"
+    "naive-ui": "^2.45.3",
+    "pinia": "^4.0.3",
+    "vue": "^3.5.43",
+    "vue-router": "^5.3.1"
   },
   "devDependencies": {
-    "@tsconfig/node22": "^22.0.5",
-    "@types/crypto-js": "^4.2.2",
-    "@types/node": "^25.0.3",
+    "@tsconfig/node22": "^22.0.6",
+    "@types/node": "^26.6.3",
     "@vicons/fluent": "^0.13.0",
-    "@vitejs/plugin-vue": "^6.0.3",
-    "@vue/tsconfig": "^0.8.1",
-    "naive-ui": "^2.43.2",
-    "npm-run-all2": "^8.0.4",
-    "typescript": "~5.9.3",
-    "vite": "^7.3.1",
-    "vite-plugin-vue-devtools": "^8.0.5",
-    "vue-tsc": "^3.2.2"
-  }
+    "@vitejs/plugin-vue": "^6.0.9",
+    "@vue/tsconfig": "^0.9.1",
+    "npm-run-all2": "^9.0.3",
+    "oxfmt": "^0.70.0",
+    "oxlint": "^1.85.0",
+    "typescript": "~7.0.2",
+    "vite": "^8.3.1",
+    "vite-plugin-vue-devtools": "^8.2.1",
+    "vue-tsc": "^3.3.11"
+  },
+  "engines": {
+    "node": ">=26.8.2"
+  },
+  "packageManager": "pnpm@12.6.0"
 }

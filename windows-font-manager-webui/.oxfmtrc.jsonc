@@ -1,0 +1,18 @@
+{
+  "ignorePatterns": [
+    "*.toml",
+    "*.md",
+    "Aegisub",
+    "dist",
+    "node_modules",
+    "test-results",
+    "platforms/android/.gradle",
+    "platforms/windows/AegisubWebView/bin",
+    "platforms/windows/AegisubWebView/obj",
+  ],
+  "endOfLine": "lf",
+  "singleQuote": true,
+  "semi": false,
+  "sortImports": true,
+  "arrowParens": "avoid",
+}

@@ -2,8 +2,9 @@ import asyncio
 import ctypes
 from ctypes import wintypes
 from pathlib import Path
+from typing import ClassVar
 
-from easyrip import log
+from easyrip.easyrip_log import log
 from easyrip.ripper.sub_and_font.font import Font, load_fonts
 
 from .global_val import WIN_FONT_PATHS
@@ -158,7 +159,7 @@ def remove_font(path: str | Path) -> tuple[bool, str]:
 
 
 class font_data:
-    font_data_dict: dict[str, list[Font]] = {}
+    font_data_dict: ClassVar[dict[str, list[Font]]] = {}
     """实时变化的监听目录及其结果"""
 
     @classmethod
@@ -188,10 +189,3 @@ class font_data:
                     cls.pop_font_data_dir.__name__,
                     e,
                 )
-
-    @classmethod
-    def get_font_info(
-        cls,
-        pathname: str,
-    ):  # TODO
-        fonts = load_fonts(pathname)
