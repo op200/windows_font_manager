@@ -1,18 +1,19 @@
 /*
-!.vscode/
-!.gitignore
-!LICENSE
-!README.md
-!.github/
-!windows_font_manager/
-!windows-font-manager-webui/
-!doc/
-!pyproject.toml
-!build_hook.py
-!run_build.py
-!MANIFEST.in
-!ruff.toml
-!BackFont.fcp
+!/.vscode/
+!/.gitignore
+!/.gitattributes
+!/LICENSE
+!/README.md
+!/.github/
+!/windows_font_manager/
+!/windows-font-manager-webui/
+!/doc/
+!/pyproject.toml
+!/build_hook.py
+!/run_build.py
+!/MANIFEST.in
+!/ruff.toml
+!/BackFont.fcp
 
 __pycache__
 

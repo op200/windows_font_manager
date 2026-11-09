@@ -10,7 +10,7 @@ PNPM_HEAD = f"pnpm --dir ./{DIR}"
 def run_pnpm() -> None:
     for param in (
         "i --frozen-lockfile",
-        "build-only",  # TODO: vue-tsc 不支持 TS7，支持后改为 build
+        "build",
     ):
         cmd = f"{PNPM_HEAD} {param}"
         print(f"run: {cmd}")

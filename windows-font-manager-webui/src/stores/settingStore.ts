@@ -6,5 +6,7 @@ export const useSettingStore = defineStore('setting', () => {
 
   const show_text_size = ref(1.4)
 
-  return { is_debug, show_text_size }
+  const ignore_case = ref(true)
+
+  return { is_debug, show_text_size, ignore_case }
 })

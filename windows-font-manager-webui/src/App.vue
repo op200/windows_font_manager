@@ -29,6 +29,7 @@ import {
 import type { Key } from 'naive-ui/es/cascader/src/interface'
 import { storeToRefs } from 'pinia'
 import { h, onBeforeMount, ref, watch } from 'vue'
+import { useI18n } from 'vue-i18n'
 import { RouterLink, RouterView, useRoute } from 'vue-router'
 
 import { useMainStore } from '@/stores/mainStore'
@@ -36,19 +37,30 @@ import { useMainStore } from '@/stores/mainStore'
 import { log } from './utils/log'
 import { compare_version, open_page } from './utils/utils'
 
+const { locale } = useI18n({ useScope: 'global' })
+const { t } = useI18n({
+  useScope: 'local',
+  messages: {
+    'zh-CN': {
+      Manager: '管理',
+      Setting: '设置',
+      Log: '日志',
+      About: '关于',
+      'New version': '新版本',
+    },
+  },
+})
+
 const route = useRoute()
 
 const { ws, is_connect, back_info } = storeToRefs(useMainStore())
 
 const currentTheme = ref()
 const css_data_theme = ref<string>()
-const currentLang = ref({ lang: zhCN, dateLang: dateZhCN })
-
 watch(currentTheme, newVal => {
-  log.info(currentTheme.value.name)
+  log.info('auto theme', currentTheme.value.name)
   css_data_theme.value = currentTheme.value.name
 })
-
 onBeforeMount(() => {
   currentTheme.value = window.matchMedia('(prefers-color-scheme: dark)').matches
     ? darkTheme
@@ -64,6 +76,29 @@ onBeforeMount(() => {
     ) // 监听系统主题
 })
 
+const currentLang = ref({ lang: enUS, dateLang: dateEnUS })
+watch(
+  currentLang,
+  newVal => {
+    locale.value = currentLang.value.lang.name
+  },
+  { deep: true },
+)
+onBeforeMount(() => {
+  _: for (const lang_tag of navigator.languages) {
+    const [lang, ...suffix] = lang_tag.split('-')
+    switch (lang) {
+      case 'zh':
+        currentLang.value = { lang: zhCN, dateLang: dateZhCN }
+        break _
+      case 'en':
+        currentLang.value = { lang: enUS, dateLang: dateEnUS }
+        break _
+    }
+  }
+  log.info('auto lang', currentLang.value.lang.name)
+})
+
 const menuOptions: MenuOption[] = [
   {
     label: () =>
@@ -74,7 +109,7 @@ const menuOptions: MenuOption[] = [
             name: 'manager',
           },
         },
-        { default: () => 'Manager' },
+        { default: () => t('Manager') },
       ),
     key: 'manager',
     icon: () => h(AppGeneric20Regular),
@@ -88,7 +123,7 @@ const menuOptions: MenuOption[] = [
             name: 'setting',
           },
         },
-        { default: () => 'Setting' },
+        { default: () => t('Setting') },
       ),
     key: 'setting',
     icon: () => h(Settings24Regular),
@@ -102,7 +137,7 @@ const menuOptions: MenuOption[] = [
             name: 'log',
           },
         },
-        { default: () => 'Log' },
+        { default: () => t('Log') },
       ),
     key: 'log',
     icon: () => h(TextBulletListSquare20Regular),
@@ -116,7 +151,7 @@ const menuOptions: MenuOption[] = [
             name: 'about',
           },
         },
-        { default: () => 'About' },
+        { default: () => t('About') },
       ),
     key: 'about',
     icon: () => h(Info24Regular),
@@ -152,7 +187,7 @@ const collapseMenu = ref(true)
             compare_version(back_info.latest_release_ver, back_info.version) > 0
           "
         >
-          New version v{{ back_info.latest_release_ver }}
+          {{ t('New version') }} v{{ back_info.latest_release_ver }}
         </n-button>
 
         <n-button
@@ -195,8 +230,8 @@ const collapseMenu = ref(true)
           @click="
             () => {
               if (currentLang.lang.name === 'zh-CN')
-                ((currentLang.lang = enUS), (currentLang.dateLang = dateEnUS))
-              else ((currentLang.lang = zhCN), (currentLang.dateLang = dateZhCN))
+                currentLang = { lang: enUS, dateLang: dateEnUS }
+              else currentLang = { lang: zhCN, dateLang: dateZhCN }
             }
           "
         >

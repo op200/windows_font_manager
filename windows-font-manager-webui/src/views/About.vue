@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { NCard } from 'naive-ui'
+import { NA, NCard } from 'naive-ui'
 import { storeToRefs } from 'pinia'
 
 import { useMainStore } from '@/stores/mainStore'
@@ -13,7 +13,7 @@ const home_url = 'https://github.com/op200/windows_font_manager'
   <div style="display: grid; gap: 1rem; padding: 1rem; position: relative; overflow-x: hidden">
     <n-card title="Windows Font Manager">
       <template #header-extra>
-        <a :href="home_url">{{ home_url }}</a>
+        <n-a :href="home_url">{{ home_url }}</n-a>
       </template>
       <div>
         <span v-if="back_info">v{{ back_info.version }}</span>

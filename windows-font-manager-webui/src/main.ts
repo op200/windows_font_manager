@@ -4,11 +4,11 @@ import { createApp } from 'vue'
 import '@/assets/fonts.css'
 
 import App from './App.vue'
+import { i18n } from './i18n.ts'
 import router from './router'
 
-const app = createApp(App)
-
-app.use(createPinia())
-app.use(router)
-
-app.mount('#app')
+createApp(App) //
+  .use(i18n)
+  .use(createPinia())
+  .use(router)
+  .mount('#app')

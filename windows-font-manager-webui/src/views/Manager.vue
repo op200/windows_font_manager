@@ -24,13 +24,45 @@ import {
 import type { RowData } from 'naive-ui/es/data-table/src/interface'
 import { storeToRefs } from 'pinia'
 import { computed, h, onMounted, ref, watch } from 'vue'
+import { useI18n } from 'vue-i18n'
 
 import { useMainStore, type FontData } from '@/stores/mainStore'
 import { useSettingStore } from '@/stores/settingStore'
 import { log } from '@/utils/log'
 
+const { t } = useI18n({
+  useScope: 'local',
+  messages: {
+    'zh-CN': {
+      Search: '搜索',
+      Show: '展示',
+      'Add directories': '添加目录',
+      'One directory per line': '每行一个目录',
+      Cancel: '取消',
+      Delete: '删除',
+      'Copy delete CMD': '复制删除命令行命令',
+      // 字体详细
+      Created: '创建时间',
+      Modified: '修改时间',
+      Revision: '修订号',
+      Version: '版本',
+      Variable: '可变字体',
+      'units/em': 'units/em',
+      Glyph: 'Glyph',
+      CMap: 'CMap',
+      'Copyright notice': '版权声明',
+      'Unique ID': '唯一标识符',
+      'Full name': '全名',
+      'PostScript name': 'PostScript 名称',
+      Trademark: '商标',
+      Manufacturer: '制造商',
+      Designer: '设计者',
+    },
+  },
+})
+
 const { ws, font_dict, font_dict_selected, search_text, show_text } = storeToRefs(useMainStore())
-const { show_text_size } = storeToRefs(useSettingStore())
+const { show_text_size, ignore_case } = storeToRefs(useSettingStore())
 
 const show_text_replaced = computed(() => show_text.value.replace(/(?<!\\)\\n/g, '\n'))
 
@@ -90,7 +122,7 @@ async function refresh_search_text() {
   }
 
   filted_value.value = font_dict.value[font_dict_selected.value]?.filter(v => {
-    const regex = new RegExp(search_text.value)
+    const regex = new RegExp(search_text.value, ignore_case.value ? 'i' : '')
     if (regex.test(v.filename)) return true
     for (const family of v.familys) if (regex.test(family)) return true
   })
@@ -181,10 +213,10 @@ const drawer_data = ref<Font_info_res | undefined>(undefined)
       v-model:show="show_tab_add_modal"
       :mask-closable="false"
       preset="dialog"
-      negative-text="Cancel"
+      :negative-text="t('Cancel')"
       positive-text="OK"
       :show-icon="false"
-      title="Add directories"
+      :title="t('Add directories')"
       @positive-click="
         () => {
           if (!tab_add_modal_input) return
@@ -204,7 +236,7 @@ const drawer_data = ref<Font_info_res | undefined>(undefined)
         <n-input
           v-model:value="tab_add_modal_input"
           type="textarea"
-          placeholder="One directory per line"
+          :placeholder="t('One directory per line')"
         />
       </n-space>
     </n-modal>
@@ -217,7 +249,7 @@ const drawer_data = ref<Font_info_res | undefined>(undefined)
       negative-text="Cancel"
       positive-text="OK"
       :show-icon="false"
-      :title="`Delete ${will_del_fonts.length} font${will_del_fonts.length ? 's' : ''}${is_close_tab_before_del_fonts ? ' after closing tab' : ''}`"
+      :title="`${t('Delete')} ${will_del_fonts.length} font${will_del_fonts.length ? 's' : ''}${is_close_tab_before_del_fonts ? ' after closing tab' : ''}`"
       @positive-click="
         () => {
           font_dict = {}
@@ -244,7 +276,7 @@ const drawer_data = ref<Font_info_res | undefined>(undefined)
               }
             "
           >
-            Copy delete CMD
+            {{ t('Copy delete CMD') }}
           </n-button>
         </n-space>
         <n-list bordered style="height: 24em; overflow-y: auto">
@@ -335,14 +367,14 @@ const drawer_data = ref<Font_info_res | undefined>(undefined)
               clearable
               v-model:value="search_text"
               type="text"
-              placeholder="Search"
+              :placeholder="t('Search')"
               style="font-family: serif; min-width: 25em"
             />
             <n-input
               clearable
               v-model:value="show_text"
               type="text"
-              placeholder="Show"
+              :placeholder="t('Show')"
               style="font-family: serif; min-width: 25em"
             />
           </n-space>
@@ -517,7 +549,7 @@ const drawer_data = ref<Font_info_res | undefined>(undefined)
       </n-tab-pane>
     </n-tabs>
   </div>
-  <n-drawer v-model:show="drawer_show" :width="'50%'">
+  <n-drawer v-model:show="drawer_show" :width="'60%'">
     <n-drawer-content>
       <div
         v-if="drawer_data === undefined"
@@ -538,44 +570,62 @@ const drawer_data = ref<Font_info_res | undefined>(undefined)
         label-placement="left"
         :title="drawer_data.pathname"
         :label-style="{
-          'white-space': 'nowrap',
+          'white-space': 'pre',
         }"
       >
-        <n-descriptions-item label="Created">{{
+        <n-descriptions-item :label="t('Created')" style="white-space: pre">{{
           new Intl.DateTimeFormat(undefined, {
-            dateStyle: 'medium',
-            timeStyle: 'medium',
+            year: 'numeric',
+            month: 'short',
+            day: 'numeric',
+            hour: 'numeric',
+            minute: '2-digit',
+            second: '2-digit',
+            timeZoneName: 'short',
           }).format(new Date((drawer_data.created - 2082844800) * 1000))
         }}</n-descriptions-item>
-        <n-descriptions-item label="Modified">{{
+        <n-descriptions-item :label="t('Modified')" style="white-space: pre">{{
           new Intl.DateTimeFormat(undefined, {
-            dateStyle: 'medium',
-            timeStyle: 'medium',
+            year: 'numeric',
+            month: 'short',
+            day: 'numeric',
+            hour: 'numeric',
+            minute: '2-digit',
+            second: '2-digit',
+            timeZoneName: 'short',
           }).format(new Date((drawer_data.modified - 2082844800) * 1000))
         }}</n-descriptions-item>
-        <n-descriptions-item label="Revision">{{ drawer_data.revision }}</n-descriptions-item>
-        <n-descriptions-item label="Version">{{ drawer_data.version }}</n-descriptions-item>
-        <n-descriptions-item label="Variable"
+        <n-descriptions-item :label="t('Revision')">{{ drawer_data.revision }}</n-descriptions-item>
+        <n-descriptions-item :label="t('Version')">{{ drawer_data.version }}</n-descriptions-item>
+        <n-descriptions-item :label="t('Variable')"
           ><n-text :type="drawer_data.is_variable ? 'success' : 'error'">{{
             drawer_data.is_variable ? 'YES' : 'NO'
           }}</n-text></n-descriptions-item
         >
-        <n-descriptions-item label="units/em">{{ drawer_data.units_per_em }}</n-descriptions-item>
-        <n-descriptions-item label="Glyph">{{ drawer_data.glyph_count }}</n-descriptions-item>
-        <n-descriptions-item label="CMap">{{ drawer_data.cmap_len }}</n-descriptions-item>
-        <n-descriptions-item label="Copyright notice" :span="2">{{
+        <n-descriptions-item :label="t('units/em')">{{
+          drawer_data.units_per_em
+        }}</n-descriptions-item>
+        <n-descriptions-item :label="t('Glyph')">{{ drawer_data.glyph_count }}</n-descriptions-item>
+        <n-descriptions-item :label="t('CMap')">{{ drawer_data.cmap_len }}</n-descriptions-item>
+        <n-descriptions-item :label="t('Copyright notice')" :span="2">{{
           drawer_data.copyright_notice
         }}</n-descriptions-item>
-        <n-descriptions-item label="Unique ID">{{ drawer_data.unique_id }}</n-descriptions-item>
-        <n-descriptions-item label="Full name">{{ drawer_data.full_name }}</n-descriptions-item>
-        <n-descriptions-item label="PostScript name">{{
+        <n-descriptions-item :label="t('Unique ID')">{{
+          drawer_data.unique_id
+        }}</n-descriptions-item>
+        <n-descriptions-item :label="t('Full name')">{{
+          drawer_data.full_name
+        }}</n-descriptions-item>
+        <n-descriptions-item :label="t('PostScript name')">{{
           drawer_data.PostScript_name
         }}</n-descriptions-item>
-        <n-descriptions-item label="Trademark">{{ drawer_data.trademark }}</n-descriptions-item>
-        <n-descriptions-item label="Manufacturer">{{
+        <n-descriptions-item :label="t('Trademark')">{{
+          drawer_data.trademark
+        }}</n-descriptions-item>
+        <n-descriptions-item :label="t('Manufacturer')">{{
           drawer_data.manufacturer
         }}</n-descriptions-item>
-        <n-descriptions-item label="Designer">{{ drawer_data.designer }}</n-descriptions-item>
+        <n-descriptions-item :label="t('Designer')">{{ drawer_data.designer }}</n-descriptions-item>
       </n-descriptions>
     </n-drawer-content>
   </n-drawer>

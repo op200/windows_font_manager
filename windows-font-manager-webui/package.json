@@ -10,30 +10,34 @@
     "build-only": "vite build",
     "lint": "run-s lint:*",
     "lint:oxlint": "oxlint . --fix",
-    "type-check": "vue-tsc --build"
+    "type-check": "vue-tsc --build",
+    "fmt": "oxfmt",
+    "fmt:check": "oxfmt --check",
+    "check": "pnpm fmt:check && pnpm lint && pnpm type-check"
   },
   "dependencies": {
     "naive-ui": "^2.45.3",
-    "pinia": "^4.0.3",
-    "vue": "^3.5.43",
-    "vue-router": "^5.3.1"
+    "pinia": "^4.1.0",
+    "vue": "^3.5.45",
+    "vue-i18n": "^11.4.18",
+    "vue-router": "^5.4.0"
   },
   "devDependencies": {
     "@tsconfig/node22": "^22.0.6",
-    "@types/node": "^26.6.3",
+    "@types/node": "^26.6.6",
     "@vicons/fluent": "^0.13.0",
-    "@vitejs/plugin-vue": "^6.0.9",
+    "@vitejs/plugin-vue": "^6.0.10",
     "@vue/tsconfig": "^0.9.1",
-    "npm-run-all2": "^9.0.3",
-    "oxfmt": "^0.70.0",
-    "oxlint": "^1.85.0",
+    "npm-run-all2": "^9.0.4",
+    "oxfmt": "^0.78.0",
+    "oxlint": "^1.92.0",
     "typescript": "~7.0.2",
-    "vite": "^8.3.1",
+    "vite": "^8.3.6",
     "vite-plugin-vue-devtools": "^8.2.1",
-    "vue-tsc": "^3.3.11"
+    "vue-tsc": "^3.3.14"
   },
   "engines": {
-    "node": ">=26.8.2"
+    "node": ">=26.10.0"
   },
-  "packageManager": "pnpm@12.6.0"
+  "packageManager": "pnpm@12.18.0"
 }
